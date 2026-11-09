@@ -1,0 +1,26 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/capture/capture",
+    "pages/reader/reader",
+    "pages/help/help",
+    "pages/reply/reply",
+    "pages/cards/cards",
+    "pages/library/library"
+  ],
+  "window": {
+    "navigationBarTitleText": "一步一步",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#FFFFFF",
+    "backgroundTextStyle": "dark"
+  },
+  "style": "v2",
+  "permission": {
+    "scope.record": {
+      "desc": "用于把您的话转成文字，问这一页纸"
+    }
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

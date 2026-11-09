@@ -1,0 +1,109 @@
+.page {
+  padding: 24px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.flex1 {
+  flex: 1;
+}
+
+.title {
+  font-size: 40px;
+  line-height: 1.4;
+  color: var(--c-text);
+}
+
+.card {
+  width: 100%;
+  border: 2px solid var(--c-line);
+  border-radius: 16px;
+  padding: 28px 22px;
+}
+
+.card-text {
+  display: block;
+  font-size: 40px;
+  line-height: 1.5;
+  color: var(--c-text);
+}
+
+.anchor {
+  display: block;
+  margin-top: 14px;
+  font-size: 26px;
+  color: var(--c-text-2);
+  line-height: 1.5;
+}
+
+.tip {
+  padding-left: 2px;
+}
+
+.input {
+  width: 100%;
+  min-height: 120px;
+  border: 2px solid var(--c-line);
+  border-radius: 12px;
+  padding: 20px;
+  font-size: 32px;
+  line-height: 1.5;
+  color: var(--c-text);
+  background: #FFFFFF;
+  box-sizing: border-box;
+}
+
+.ph {
+  color: #AAAAAA;
+  font-size: 30px;
+}
+
+.center {
+  text-align: center;
+}
+
+.full {
+  width: 100%;
+}
+
+.err-title {
+  font-size: 38px;
+  color: var(--c-text);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.ok-title {
+  font-size: 46px;
+  color: var(--c-primary);
+  text-align: center;
+}
+
+/* 产品签名：只出现在子女端，老人端不露任何品牌 */
+.signature {
+  margin-top: auto;
+  padding-top: 28px;
+  text-align: center;
+}
+
+.sig-text {
+  font-size: 24px;
+  color: var(--c-text-3);
+  letter-spacing: 0.5px;
+}
+
+/* 文字链式的分享入口：比按钮轻，不抢"再补一句"的位置 */
+.share-link {
+  background: transparent;
+  color: var(--c-primary);
+  font-size: 28px;
+  line-height: 1.5;
+  padding: 8px 16px;
+  border-bottom: 2px solid var(--c-primary-light);
+  border-radius: 0;
+}
+
+.share-link::after {
+  border: none;
+}

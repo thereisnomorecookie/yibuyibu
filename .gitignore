@@ -1,0 +1,22 @@
+# 微信开发者工具本地私有配置
+project.private.config.json
+
+# 云开发本地调试缓存
+.cloudbase/
+
+# WorkBuddy 会话数据
+.workbuddy/
+
+# 依赖
+node_modules/
+miniprogram_npm/
+
+# 系统与编辑器
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+*.log
+*.tmp
+*.bak

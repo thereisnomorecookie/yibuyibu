@@ -1,0 +1,9 @@
+{
+  "name": "askCard",
+  "version": "1.0.0",
+  "description": "受限问答：只回答当前卡片与该页原文",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

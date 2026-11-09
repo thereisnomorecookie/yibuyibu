@@ -1,0 +1,64 @@
+<!-- 确认态 -->
+<view class="page page-center" wx:if="{{state === 'confirm'}}">
+  <text class="ask">要不要让孩子看看这一步？</text>
+
+  <view class="mini-card mt-32">
+    <text class="mini-count">第 {{stepNo}} 步 / 共 {{stepTotal}} 步</text>
+    <text class="mini-text">{{step.text}}</text>
+  </view>
+
+  <view class="mt-48 full">
+    <button class="btn btn-primary" hover-class="none" disabled="{{creating}}" bindtap="confirmYes">{{creating ? '正在准备…' : '要'}}</button>
+  </view>
+  <view class="mt-24 full">
+    <button class="btn btn-ghost" hover-class="none" bindtap="confirmNo">不用了</button>
+  </view>
+</view>
+
+<!-- 准备发送态 -->
+<view class="page page-center" wx:elif="{{state === 'ready'}}">
+  <text class="ask">点下面这个，发给孩子</text>
+  <text class="t-body center mt-16">发出去以后，他点开就能看到这一步</text>
+
+  <view class="mt-48 full">
+    <button class="btn btn-primary" open-type="share" hover-class="none" bindtap="startWaiting">发给孩子的微信</button>
+  </view>
+  <view class="mt-24 full">
+    <button class="btn btn-ghost" hover-class="none" bindtap="back">算了</button>
+  </view>
+</view>
+
+<!-- 等待态 -->
+<view class="page page-center" wx:elif="{{state === 'waiting'}}">
+  <text class="ask">已经发出去了</text>
+
+  <view class="mini-card mt-32">
+    <text class="mini-count">第 {{stepNo}} 步 / 共 {{stepTotal}} 步</text>
+    <text class="mini-text">{{step.text}}</text>
+  </view>
+
+  <view class="dots mt-48">
+    <view class="dot"></view>
+    <view class="dot"></view>
+    <view class="dot"></view>
+  </view>
+
+  <text class="t-hint center mt-24">{{waitHint}}</text>
+
+  <view class="mt-48 full">
+    <button class="btn btn-ghost" hover-class="none" bindtap="back">先回去</button>
+  </view>
+</view>
+
+<!-- 收到回复态 -->
+<view class="page page-center" wx:else>
+  <text class="ask">孩子说</text>
+
+  <view class="reply-box mt-32">
+    <text class="reply-text">{{reply}}</text>
+  </view>
+
+  <view class="mt-48 full">
+    <button class="btn btn-primary" hover-class="none" bindtap="back">知道了</button>
+  </view>
+</view>

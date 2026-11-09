@@ -1,0 +1,38 @@
+<view class="page">
+  <text class="lead">这些是示例，不是标准答案</text>
+  <text class="lead-sub">看看别人家那一页怎么拍，再拍您自己家的</text>
+
+  <view wx:for="{{groups}}" wx:key="category" class="group">
+    <text class="group-title">{{item.category}}</text>
+
+    <view
+      class="item"
+      wx:for="{{item.items}}"
+      wx:for-item="it"
+      wx:key="id"
+      data-id="{{it.id}}"
+      bindtap="openItem">
+      <view class="item-main">
+        <text class="item-title">{{it.title}}</text>
+        <text class="item-sub" wx:if="{{it.count > 0}}">{{it.count}} 步 · 示例</text>
+        <text class="item-sub" wx:else>只念原文 · 示例</text>
+      </view>
+      <text class="item-arrow">›</text>
+    </view>
+  </view>
+
+  <text class="t-hint mt-32 center">找不到想用的？回去拍一张就是了</text>
+</view>
+
+<!-- 点一组：先告诉你该拍哪一页，主按钮永远是「拍我家的」 -->
+<view class="sheet-mask" wx:if="{{sheet.show}}" bindtap="closeSheet"></view>
+<view class="sheet" wx:if="{{sheet.show}}">
+  <text class="sheet-title">{{sheet.title}}</text>
+  <text class="sheet-sub">{{sheet.count > 0 ? sheet.count + ' 步 · 示例' : '只念原文 · 示例'}}</text>
+
+  <text class="sheet-label">该拍哪一页</text>
+  <text class="sheet-hint">{{sheet.hint}}</text>
+
+  <button class="btn btn-primary mt-24" hover-class="none" bindtap="goCapture">拍我家的</button>
+  <button class="btn btn-ghost mt-16" hover-class="none" bindtap="viewExample">看示例</button>
+</view>

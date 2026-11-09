@@ -1,0 +1,115 @@
+.page {
+  padding: 32px 24px 28px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
+}
+
+.title {
+  font-size: 46px;
+  line-height: 1.2;
+  color: var(--c-text);
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  margin-top: 10px;
+  font-size: 28px;
+  color: var(--c-text-2);
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 28px 0;
+}
+
+/* 巨大主按钮：整块可点，视觉上明确只有一个动作 */
+.huge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 300px;
+  border-radius: 24px;
+  background: var(--c-primary);
+}
+
+.huge-press {
+  background: var(--c-primary-dark);
+}
+
+.huge-label {
+  margin-top: 20px;
+  font-size: 40px;
+  color: #FFFFFF;
+  letter-spacing: 3px;
+}
+
+/* 相机图标：纯 CSS，不用图片，避免加载失败 */
+.cam {
+  position: relative;
+  width: 96px;
+  height: 76px;
+}
+
+.cam-body {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 96px;
+  height: 66px;
+  border: 5px solid #FFFFFF;
+  border-radius: 12px;
+}
+
+.cam-top {
+  position: absolute;
+  left: 28px;
+  top: 0;
+  width: 34px;
+  height: 12px;
+  border: 5px solid #FFFFFF;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+}
+
+.cam-lens {
+  position: absolute;
+  left: 33px;
+  bottom: 15px;
+  width: 30px;
+  height: 30px;
+  border: 5px solid #FFFFFF;
+  border-radius: 50%;
+}
+
+.foot {
+  padding-top: 20px;
+  text-align: center;
+}
+
+/* ---------- 收到分享卡组的确认态 ---------- */
+.center {
+  text-align: center;
+}
+
+.recv-title {
+  font-size: 42px;
+  line-height: 1.5;
+  color: var(--c-text);
+  text-align: center;
+}
+
+.recv-sub {
+  margin-top: 18px;
+  font-size: 30px;
+  color: var(--c-text-2);
+  text-align: center;
+  line-height: 1.5;
+}

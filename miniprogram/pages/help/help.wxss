@@ -1,0 +1,51 @@
+.ask {
+  font-size: 40px;
+  line-height: 1.5;
+  color: var(--c-text);
+  text-align: center;
+}
+
+.center {
+  text-align: center;
+}
+
+.mini-card {
+  width: 100%;
+  border: 2px solid var(--c-line);
+  border-radius: 14px;
+  padding: 24px 20px;
+}
+
+.mini-count {
+  display: block;
+  font-size: 24px;
+  color: var(--c-text-3);
+  margin-bottom: 12px;
+}
+
+.mini-text {
+  display: block;
+  font-size: 36px;
+  line-height: 1.5;
+  color: var(--c-text);
+}
+
+.reply-box {
+  width: 100%;
+  background: var(--c-primary-light);
+  border-radius: 16px;
+  padding: 32px 24px;
+}
+
+.reply-text {
+  display: block;
+  font-size: 44px;
+  line-height: 1.5;
+  color: var(--c-primary);
+  text-align: center;
+  word-break: break-all;
+}
+
+.full {
+  width: 100%;
+}

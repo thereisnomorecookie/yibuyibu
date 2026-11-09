@@ -1,0 +1,54 @@
+<!-- 取景态 -->
+<view class="page-cam" wx:if="{{stage === 'idle'}}">
+  <camera class="cam" device-position="back" flash="off" binderror="onCamError"></camera>
+
+  <view class="mask-layer">
+    <view class="frame">
+      <view class="corner tl"></view>
+      <view class="corner tr"></view>
+      <view class="corner bl"></view>
+      <view class="corner br"></view>
+    </view>
+    <text class="frame-tip">把整页字放进框里</text>
+  </view>
+
+  <view class="bottom-bar">
+    <view class="shutter-wrap">
+      <view class="shutter" bindtap="takePhoto" hover-class="shutter-press" hover-stay-time="60"></view>
+      <text class="shutter-label">拍</text>
+    </view>
+    <text class="album-entry" bindtap="chooseAlbum">从相册选</text>
+  </view>
+
+  <view class="sample-entry" bindtap="pickSample">看看示例</view>
+</view>
+
+<!-- 处理态 -->
+<view class="page page-center" wx:elif="{{stage === 'busy'}}">
+  <view class="stairs busy-stairs">
+    <view class="stair {{stageIdx >= item ? 'on' : ''}}" wx:for="{{stairs}}" wx:key="*this"></view>
+  </view>
+
+  <text class="busy-title">{{processTitle}}</text>
+
+  <view class="dots mt-32">
+    <view class="dot"></view>
+    <view class="dot"></view>
+    <view class="dot"></view>
+  </view>
+
+  <text class="t-hint mt-24 center">别急，马上就好</text>
+</view>
+
+<!-- 失淡态 -->
+<view class="page page-center" wx:else>
+  <text class="fail-title">{{failTitle}}</text>
+  <text class="t-body mt-16 center">{{failHint}}</text>
+
+  <view class="mt-48">
+    <button class="btn btn-primary" hover-class="none" bindtap="retry">再拍一张</button>
+  </view>
+  <view class="mt-24">
+    <button class="btn btn-outline" hover-class="none" bindtap="pickSample">用样例看看</button>
+  </view>
+</view>

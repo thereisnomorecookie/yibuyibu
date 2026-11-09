@@ -1,0 +1,10 @@
+{
+  "name": "ocrCard",
+  "version": "1.1.0",
+  "description": "通用印刷体识别与文本重排（微信云调用 + 腾讯云 OCR 双通道）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "tencentcloud-sdk-nodejs-ocr": "^4.0.0"
+  }
+}

@@ -1,0 +1,47 @@
+<view class="page">
+  <view class="empty" wx:if="{{empty}}">
+    <text class="empty-title">还没有卡</text>
+    <text class="t-hint mt-16">拍一张纸，就有了</text>
+    <view class="mt-48 full">
+      <button class="btn btn-primary" hover-class="none" bindtap="goHome">去拍一张</button>
+    </view>
+    <view class="mt-24 full">
+      <button class="btn btn-ghost" hover-class="none" bindtap="goLibrary">看看别人怎么拍</button>
+    </view>
+  </view>
+
+  <view wx:else>
+    <view class="lib-entry" hover-class="none" bindtap="goLibrary">
+      <text class="lib-entry-text">不知道拍哪一页？看看示例</text>
+      <text class="lib-entry-arrow">›</text>
+    </view>
+
+    <text class="t-hint mt-16">这些卡不联网也能用</text>
+
+    <view
+      class="item"
+      wx:for="{{list}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="openCard"
+      bindlongpress="onLongPress">
+      <view class="item-main">
+        <text class="item-title">{{item.title}}</text>
+        <text class="item-sub">{{item.subText}}</text>
+      </view>
+    </view>
+
+    <text class="t-hint mt-32 center">长按一张卡，可以改名字、分享给微信，或者删掉</text>
+  </view>
+</view>
+
+<!-- 分享弹层：先建 token，再由用户点按钮调起微信分享 -->
+<view class="sheet-mask" wx:if="{{shareSheet.show}}" bindtap="closeShare"></view>
+<view class="share-sheet" wx:if="{{shareSheet.show}}">
+  <text class="sheet-title">分享这组卡</text>
+  <text class="sheet-sub">{{shareSheet.title}} · 共 {{shareSheet.count}} 步</text>
+  <text class="sheet-tip">对方点开就能存进自己的卡包，不用装东西</text>
+
+  <button class="btn btn-primary mt-24" open-type="share" hover-class="none">发给微信好友</button>
+  <button class="btn btn-ghost mt-16" hover-class="none" bindtap="closeShare">先不分享</button>
+</view>

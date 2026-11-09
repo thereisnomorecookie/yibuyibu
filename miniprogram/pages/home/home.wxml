@@ -1,0 +1,58 @@
+<!-- 正在取别人分享的卡组 -->
+<view class="page page-center" wx:if="{{receiving}}">
+  <view class="dots">
+    <view class="dot"></view>
+    <view class="dot"></view>
+    <view class="dot"></view>
+  </view>
+  <text class="t-hint center mt-24">正在打开这组卡</text>
+</view>
+
+<!-- 取不到（过期 / 链接不完整 / 断网） -->
+<view class="page page-center" wx:elif="{{receiveError}}">
+  <text class="recv-title">{{receiveError}}</text>
+  <view class="mt-48 full">
+    <button class="btn btn-primary" hover-class="none" bindtap="dismissReceive">回首页</button>
+  </view>
+</view>
+
+<!-- 收到卡组：全屏确认 -->
+<view class="page page-center" wx:elif="{{receive}}">
+  <text class="recv-title">给你发来一组卡</text>
+  <text class="recv-sub">{{receive.title}} · 共 {{receive.count}} 步</text>
+
+  <view class="mt-48 full">
+    <button class="btn btn-primary" hover-class="none" bindtap="saveReceived">存起来</button>
+  </view>
+  <view class="mt-24 full">
+    <button class="btn btn-ghost" hover-class="none" bindtap="dismissReceive">不存了</button>
+  </view>
+</view>
+
+<!-- 首页默认态 -->
+<view class="page" wx:else>
+  <view class="head" bindlongpress="onLongPressHead">
+    <text class="title">一步一步</text>
+    <text class="subtitle">拍一张纸，念给你听</text>
+  </view>
+
+  <view class="main">
+    <view class="huge" bindtap="goCapture" hover-class="huge-press" hover-stay-time="60">
+      <view class="cam">
+        <view class="cam-body"></view>
+        <view class="cam-lens"></view>
+        <view class="cam-top"></view>
+      </view>
+      <text class="huge-label">拍一张纸</text>
+    </view>
+  </view>
+
+  <view class="row row-gap mt-24">
+    <button class="btn btn-ghost flex1" hover-class="none" bindtap="goCards">我的卡 {{count}}</button>
+    <button class="btn btn-ghost flex1" hover-class="none" bindtap="chooseAlbum">相册里的图</button>
+  </view>
+
+  <view class="foot">
+    <text class="t-hint">{{ttsHint}}</text>
+  </view>
+</view>

@@ -1,0 +1,9 @@
+{
+  "name": "getHelp",
+  "version": "1.0.0",
+  "description": "一步一步 · getHelp",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

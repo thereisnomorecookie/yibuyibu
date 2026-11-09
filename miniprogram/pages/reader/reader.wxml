@@ -1,0 +1,117 @@
+<!-- 拦截态：命中风险闸门，不出步骤卡 -->
+<view class="page page-center" wx:if="{{blocked}}">
+  <view class="stop-mark">!</view>
+  <text class="stop-title">这一步不能替您拆。</text>
+  <text class="stop-sub">{{blockSub}}</text>
+
+  <view class="mt-48 full">
+    <button class="btn btn-danger-outline" hover-class="none" bindtap="readOriginal">念一遍原文</button>
+  </view>
+  <view class="mt-24 full">
+    <button class="btn btn-ghost" hover-class="none" bindtap="goHome">我知道了</button>
+  </view>
+</view>
+
+<!-- 完成态 -->
+<view class="page page-center" wx:elif="{{finished}}">
+  <text class="done-mark">好了</text>
+  <text class="done-sub">{{saved ? '存好了' : total + ' 步都做完了'}}</text>
+  <text class="done-hint" wx:if="{{saved}}">下次在首页的「我的卡」里能找到</text>
+
+  <view class="mt-48 full" wx:if="{{!saved}}">
+    <button class="btn btn-primary" hover-class="none" bindtap="saveCard">存到我的卡里</button>
+  </view>
+  <view class="mt-24 full">
+    <button class="btn btn-ghost" hover-class="none" bindtap="goHome">{{saved ? '回首页' : '不存了'}}</button>
+  </view>
+</view>
+
+<!-- 阅读态：一屏一卡，不滚动 -->
+<view class="page reader" wx:else bindtouchstart="onTouchStart" bindtouchend="onTouchEnd">
+  <view class="top">
+    <view class="back" bindtap="goHome" hover-class="back-press">返回</view>
+    <text class="doc-title">{{card.title}}</text>
+  </view>
+
+  <view class="content">
+    <view class="resume-hint" wx:if="{{showResume}}">接着上次的</view>
+
+    <text class="count">第 {{idx + 1}} 步 / 共 {{total}} 步</text>
+
+    <view class="card-box">
+      <text class="card-text" style="font-size: {{fontSize}}px">{{cur.text}}</text>
+    </view>
+
+    <text class="anchor" wx:if="{{cur.anchor}}">{{cur.anchor}}</text>
+  </view>
+
+  <view class="stairs-line">
+    <view
+      class="stair {{index <= idx ? 'on' : ''}}"
+      wx:for="{{stairsArr}}"
+      wx:key="*this"></view>
+  </view>
+
+  <view class="actions">
+    <view class="act-main" bindtap="onNext" hover-class="act-main-press">{{isLast ? '我做完了' : '下一步'}}</view>
+    <view class="act-row">
+      <view class="act-sub" bindtap="onReplay" hover-class="act-sub-press">再念</view>
+      <view class="act-sub" bindtap="openAsk" hover-class="act-sub-press">问一句</view>
+      <view class="act-sub act-warn" bindtap="onStuck" hover-class="act-sub-press">卡住了</view>
+    </view>
+  </view>
+</view>
+
+<!-- 问一句：只答这一页上的事，不开放聊天 -->
+<view class="ask-mask" wx:if="{{ask.show}}" bindtap="closeAsk" catchtouchmove="noop"></view>
+<view class="ask-sheet" wx:if="{{ask.show}}">
+  <!-- 选择态：先给样例，再给话筒 -->
+  <block wx:if="{{ask.stage === 'choices'}}">
+    <text class="ask-title">这一页，您想问什么？</text>
+    <text class="ask-sub">只答这一页上写的事</text>
+
+    <view
+      class="ask-q"
+      wx:for="{{quickList}}"
+      wx:key="*this"
+      data-q="{{item}}"
+      bindtap="askQuick"
+      hover-class="ask-press">{{item}}</view>
+
+    <view
+      class="ask-mic {{ask.recording ? 'on' : ''}}"
+      wx:if="{{ask.voice}}"
+      bindtouchstart="onMicStart"
+      bindtouchend="onMicEnd"
+      bindtouchcancel="onMicCancel"
+      hover-class="none">
+      <text class="ask-mic-text">{{ask.recording ? '松开，我说完了' : '按住说话'}}</text>
+    </view>
+    <text class="ask-note" wx:if="{{ask.voice && ask.recording}}">在听…</text>
+    <text class="ask-note" wx:elif="{{!ask.voice}}">麦克风没开，用上面的问题也行</text>
+  </block>
+
+  <!-- 思考态 -->
+  <block wx:elif="{{ask.stage === 'thinking'}}">
+    <text class="ask-title">在想…</text>
+    <view class="dots mt-32">
+      <view class="dot"></view>
+      <view class="dot"></view>
+      <view class="dot"></view>
+    </view>
+    <text class="ask-note">马上就好</text>
+  </block>
+
+  <!-- 回答态：不推进步骤，问完还停在这一步 -->
+  <block wx:else>
+    <text class="ask-qecho">您问：{{ask.question}}</text>
+    <text class="ask-answer">{{ask.answer}}</text>
+
+    <view class="mt-32">
+      <button class="btn btn-primary" hover-class="none" bindtap="askAgain">再问一句</button>
+    </view>
+    <view class="mt-16">
+      <button class="btn btn-ghost" hover-class="none" bindtap="closeAsk">知道了</button>
+    </view>
+  </block>
+</view>

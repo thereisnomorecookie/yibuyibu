@@ -1,0 +1,10 @@
+{
+  "name": "tts",
+  "version": "1.0.0",
+  "description": "文字转语音",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "tencentcloud-sdk-nodejs-tts": "^4.0.0"
+  }
+}

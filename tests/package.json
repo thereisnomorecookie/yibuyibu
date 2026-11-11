@@ -1,0 +1,10 @@
+{
+  "name": "yibuyibu-app-tests",
+  "version": "0.0.0",
+  "private": true,
+  "description": "小程序页面单元测试（Node 内置测试运行器，无第三方依赖）",
+  "scripts": {
+    "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage"
+  }
+}

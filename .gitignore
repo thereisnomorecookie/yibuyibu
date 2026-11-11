@@ -11,6 +11,11 @@ project.private.config.json
 node_modules/
 miniprogram_npm/
 
+# 测试覆盖率产物（每次跑 test:coverage 都会重新生成）
+coverage/
+*.lcov
+clover.xml
+
 # 系统与编辑器
 Thumbs.db
 desktop.ini

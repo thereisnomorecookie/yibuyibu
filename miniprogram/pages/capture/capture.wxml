@@ -23,21 +23,23 @@
   <view class="sample-entry" bindtap="pickSample">看看示例</view>
 </view>
 
-<!-- 处理态 -->
+<!-- 处理态：把 AI 的判断摆出来，不是只转圈 -->
 <view class="page page-center" wx:elif="{{stage === 'busy'}}">
   <view class="stairs busy-stairs">
     <view class="stair {{stageIdx >= item ? 'on' : ''}}" wx:for="{{stairs}}" wx:key="*this"></view>
   </view>
 
   <text class="busy-title">{{processTitle}}</text>
+  <text class="busy-sub" wx:if="{{processSub}}">{{processSub}}</text>
 
-  <view class="dots mt-32">
+  <view class="dots mt-32" wx:if="{{stageIdx < 6}}">
     <view class="dot"></view>
     <view class="dot"></view>
     <view class="dot"></view>
   </view>
 
-  <text class="t-hint mt-24 center">别急，马上就好</text>
+  <text class="t-hint mt-24 center" wx:if="{{stageIdx < 6}}">别急，马上就好</text>
+  <text class="busy-note" wx:else>{{processNote}}</text>
 </view>
 
 <!-- 失淡态 -->

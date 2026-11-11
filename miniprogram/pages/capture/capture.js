@@ -27,6 +27,8 @@ Page({
     stage: 'idle',
     stageIdx: 0,
     processTitle: '',
+    processSub: '',
+    processNote: '',
     failTitle: '这张纸没看清',
     failHint: '能靠近一点，或者换个亮一点的地方再拍吗',
     stairs: [1, 2, 3, 4, 5, 6]
@@ -116,7 +118,15 @@ Page({
         throw e
       }
 
-      this.setStage('building')
+      // 把"认了多少"摆到屏幕上。这不是加载动画，是 AI 的判断结果
+      this.setData({
+        stage: 'busy',
+        stageIdx: 3,
+        processTitle: '认出 ' + (ocr.blocks || 0) + ' 行字',
+        processSub: '正在拆成几步…',
+        processNote: ''
+      })
+
       const built = await this.callFn('buildCards', { text: ocr.text })
       if (!built.ok) {
         throw new Error(built.errMsg || '没拆出步骤')
@@ -129,6 +139,10 @@ Page({
       app.globalData.lastBuildChecks = built.checks
         ? Object.assign({ title: built.title || '这张纸', at: Date.now() }, built.checks)
         : null
+
+      // 让结果在屏幕上停一下：拆成几步、几步拿不准，说清楚再走
+      this.showResult(built)
+      await this.wait(1300)
 
       this.goReader({
         id: store.genId(),
@@ -230,6 +244,48 @@ Page({
     if (!cfg) return
     this.setData({ stage: 'busy', stageIdx: cfg.idx, processTitle: cfg.title })
     tts.speak(cfg.voice).catch(function () {})
+  },
+
+  /**
+   * 把 AI 的判断结果摆出来，而不是"正在处理…"。
+   * 这是让 AI 可见的核心：认了多少行、拆成几步、几步拿不准，全是真实数字。
+   */
+  showResult(built) {
+    const cards = built.cards || []
+    const ck = built.checks || {}
+
+    if (built.docType === 'blocked') {
+      this.setData({
+        stage: 'busy',
+        stageIdx: 6,
+        processTitle: '这页我不拆',
+        processSub: '',
+        processNote: '涉及用药、钱或者条款，得让医生或孩子看'
+      })
+      return
+    }
+
+    const total = cards.length || ck.total || 0
+    const warned = ck.warned || 0
+    const fixed = ck.fixed || 0
+
+    let note = '都挺有把握'
+    if (warned > 0) note = '其中 ' + warned + ' 步我拿不准，您慢点看'
+    else if (fixed > 0) note = fixed + ' 步我顺手改成了人话'
+
+    this.setData({
+      stage: 'busy',
+      stageIdx: 6,
+      processTitle: '拆成 ' + total + ' 步',
+      processSub: built.title || '',
+      processNote: note
+    })
+  },
+
+  wait(ms) {
+    return new Promise(function (resolve) {
+      setTimeout(resolve, ms || 0)
+    })
   },
 
   showFail(title, hint) {

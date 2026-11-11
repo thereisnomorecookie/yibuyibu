@@ -28,9 +28,9 @@
 .frame {
   position: absolute;
   left: 11%;
-  top: 16%;
+  top: 8%;
   width: 78%;
-  height: 54%;
+  height: calc(100% - 360px);
   border-radius: 8px;
   /* 用一个超大外阴影做出"框外压暗"的效果，无需四块遮罩 */
   box-shadow: 0 0 0 3000px rgba(0, 0, 0, 0.55);
@@ -40,7 +40,7 @@
   position: absolute;
   width: 34px;
   height: 34px;
-  border: 5px solid #FFFFFF;
+  border: 5px solid #D7E8D8;
 }
 
 .corner.tl { left: -2px; top: -2px; border-right: none; border-bottom: none; border-radius: 8px 0 0 0; }
@@ -51,10 +51,10 @@
 .frame-tip {
   position: absolute;
   left: 0;
-  top: calc(16% + 54% + 20px);
+  bottom: 290px;
   width: 100%;
   text-align: center;
-  font-size: 30px;
+  font-size: 28px;
   color: #FFFFFF;
   letter-spacing: 1px;
 }
@@ -64,12 +64,14 @@
   left: 0;
   bottom: 0;
   width: 100%;
+  /* 430×932：240 高 + 贴底排列，快门中心落在距底约 159px，
+     接近系统相机；原来 270 高又垂直居中，三样东西装不下被顶到 244px */
   height: 240px;
-  padding-bottom: 40px;
+  padding-bottom: calc(36px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   z-index: 3;
 }
 
@@ -80,11 +82,12 @@
 }
 
 .shutter {
-  width: 140px;
-  height: 140px;
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
   background: #FFFFFF;
-  border: 8px solid rgba(255, 255, 255, 0.4);
+  border: 7px solid var(--c-primary-light);
+  box-shadow: 0 0 0 4px var(--c-primary);
 }
 
 .shutter-press {
@@ -93,29 +96,37 @@
 }
 
 .shutter-label {
-  margin-top: 12px;
-  font-size: 26px;
+  margin-top: 10px;
+  font-size: 24px;
+  line-height: 1.3;
   color: #FFFFFF;
 }
 
+/* 相册入口从竖排里移出来，放到快门左侧，
+   否则它会和"拍"字一起把快门往上顶 */
 .album-entry {
-  margin-top: 18px;
-  font-size: 28px;
+  position: absolute;
+  left: 20px;
+  bottom: calc(88px + env(safe-area-inset-bottom));
+  padding: 12px 18px;
+  font-size: 26px;
   color: #FFFFFF;
-  text-decoration: underline;
-  padding: 12px 20px;
+  text-decoration: none;
+  background: rgba(0, 0, 0, 0.32);
+  border-radius: 16px;
 }
 
 .sample-entry {
   position: absolute;
   right: 20px;
-  bottom: 24px;
+  /* 12 太贴底，加 8px 让它和快门、相册在同一视觉带上 */
+  bottom: calc(20px + env(safe-area-inset-bottom));
   z-index: 4;
   padding: 12px 18px;
   font-size: 24px;
-  color: rgba(255, 255, 255, 0.85);
+  color: #FFFFFF;
   border: 1px solid rgba(255, 255, 255, 0.45);
-  border-radius: 8px;
+  border-radius: 16px;
 }
 
 /* ---------- 处理态 ---------- */
@@ -132,6 +143,24 @@
   color: var(--c-text);
   text-align: center;
   line-height: 1.5;
+}
+
+/* AI 的判断结果：副标题是文档名，注脚是"几步拿不准" */
+.busy-sub {
+  margin-top: 12px;
+  font-size: 28px;
+  color: var(--c-text-2);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.busy-note {
+  margin-top: 28px;
+  padding: 0 12px;
+  font-size: 26px;
+  color: var(--c-text-2);
+  text-align: center;
+  line-height: 1.6;
 }
 
 .center {

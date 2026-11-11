@@ -30,29 +30,49 @@
 </view>
 
 <!-- 首页默认态 -->
-<view class="page" wx:else>
+<view class="page home-page" wx:else>
   <view class="head" bindlongpress="onLongPressHead">
-    <text class="title">一步一步</text>
+    <view class="brand-row">
+      <view class="brand-steps" aria-hidden="true">
+        <view class="brand-step"></view>
+        <view class="brand-step"></view>
+        <view class="brand-step"></view>
+      </view>
+      <text class="title">一步一步</text>
+    </view>
     <text class="subtitle">拍一张纸，念给你听</text>
   </view>
 
   <view class="main">
-    <view class="huge" bindtap="goCapture" hover-class="huge-press" hover-stay-time="60">
-      <view class="cam">
+    <button class="huge" bindtap="goCapture" hover-class="huge-press" hover-stay-time="60">
+      <view class="capture-art" aria-hidden="true">
+        <view class="paper"><view class="paper-line"></view><view class="paper-line"></view><view class="paper-line short"></view></view>
+        <view class="cam">
         <view class="cam-body"></view>
         <view class="cam-lens"></view>
         <view class="cam-top"></view>
+        </view>
       </view>
-      <text class="huge-label">拍一张纸</text>
-    </view>
+      <text class="huge-label">拍一张</text>
+      <text class="huge-hint">请确保拍摄环境光线充足</text>
+    </button>
+
+    <text class="ai-line">会看 · 会拆步 · 会念给您听</text>
   </view>
 
-  <view class="row row-gap mt-24">
-    <button class="btn btn-ghost flex1" hover-class="none" bindtap="goCards">我的卡 {{count}}</button>
-    <button class="btn btn-ghost flex1" hover-class="none" bindtap="chooseAlbum">相册里的图</button>
+  <view class="home-shortcuts">
+    <button class="shortcut" hover-class="shortcut-press" bindtap="goCards">
+      <view class="shortcut-top"><view class="shortcut-icon cards-icon" aria-hidden="true"></view><text class="card-count">{{count}}</text></view>
+      <text class="shortcut-label">我的卡</text>
+    </button>
+    <button class="shortcut" hover-class="shortcut-press" bindtap="chooseAlbum">
+      <view class="shortcut-top"><view class="shortcut-icon album-icon" aria-hidden="true"><view class="album-sun"></view><view class="album-hill"></view></view></view>
+      <text class="shortcut-label">从相册选</text>
+    </button>
   </view>
 
   <view class="foot">
     <text class="t-hint">{{ttsHint}}</text>
+    <view class="ai-more" bindtap="showAbilities">它还会什么 ›</view>
   </view>
 </view>

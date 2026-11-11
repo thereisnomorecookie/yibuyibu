@@ -1,21 +1,43 @@
 /* ===========================================================
    一步一步 · 全局设计系统
-   原则：白底黑字、超大字号、单屏单任务、无装饰动效
+   原则：米白底、深绿主色、超大字号、单屏单任务
    所有字号单位为 px（逻辑像素），不随屏幕缩放
    =========================================================== */
 
 page {
-  --c-bg: #FFFFFF;
-  --c-text: #141414;
-  --c-text-2: #4A4A4A;
-  --c-text-3: #757575;
-  --c-primary: #12447A;
-  --c-primary-dark: #0D3459;
-  --c-primary-light: #E8F0F9;
-  --c-danger: #B3261E;
-  --c-danger-light: #FBEAE8;
-  --c-line: #D8D8D8;
-  --c-card: #F5F5F5;
+  --color-primary: #286348;
+  --color-primary-dark: #194B35;
+  --color-primary-light: #E6EFE5;
+  --color-primary-alt: #22563C;
+  --color-on-primary: #FFFFFF;
+  --color-on-primary-soft: #E3EEE3;
+  --color-on-primary-hint: #D7E8D8;
+
+  --color-surface: #F7F8F2;
+  --color-surface-2: #FFFFFF;
+  --color-line: #CBD8C9;
+  --color-line-soft: #E1E7DB;
+  --color-text: #203B2D;
+  --color-text-2: #4B6051;
+  --color-text-3: #60705F;
+
+  --color-danger: #A4382D;
+  --color-danger-light: #F9EBE5;
+  --color-step-idle: #CBD8C9;
+  --color-step-done: var(--color-primary);
+  --shadow-soft: 0 6px 22px rgba(32, 59, 45, 0.05);
+
+  --c-bg: var(--color-surface);
+  --c-text: var(--color-text);
+  --c-text-2: var(--color-text-2);
+  --c-text-3: var(--color-text-3);
+  --c-primary: var(--color-primary);
+  --c-primary-dark: var(--color-primary-dark);
+  --c-primary-light: var(--color-primary-light);
+  --c-danger: var(--color-danger);
+  --c-danger-light: var(--color-danger-light);
+  --c-line: var(--color-line);
+  --c-card: var(--color-surface-2);
 
   --fs-card: 52px;
   --fs-h1: 44px;
@@ -25,7 +47,7 @@ page {
   --fs-hint: 24px;
 
   --h-btn: 70px;
-  --radius: 12px;
+  --radius: 18px;
 
   background: var(--c-bg);
   color: var(--c-text);
@@ -45,6 +67,7 @@ view, text, button, scroll-view, camera {
   display: flex;
   flex-direction: column;
   padding: 24px;
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
   background: var(--c-bg);
 }
 
@@ -77,9 +100,13 @@ button::after {
   height: var(--h-btn);
   border-radius: var(--radius);
   font-size: var(--fs-btn);
-  font-weight: 400;
+  min-height: var(--h-btn);
+  height: auto;
+  padding: 10px 16px;
+  font-weight: 500;
   letter-spacing: 1px;
-  transition: opacity 0.12s;
+  line-height: 1.4;
+  transition: background 0.12s, opacity 0.12s;
 }
 
 .btn:active {
@@ -88,7 +115,13 @@ button::after {
 
 .btn-primary {
   background: var(--c-primary);
-  color: #FFFFFF;
+  color: var(--color-on-primary);
+  box-shadow: 0 4px 0 var(--c-primary-dark);
+}
+
+.btn-primary:active {
+  background: var(--c-primary-dark);
+  opacity: 1;
 }
 
 .btn-outline {
@@ -99,7 +132,8 @@ button::after {
 
 .btn-ghost {
   background: var(--c-card);
-  color: var(--c-text);
+  color: var(--c-primary);
+  border: 1px solid var(--color-line-soft);
 }
 
 .btn-danger-outline {
@@ -189,9 +223,9 @@ button::after {
 
 /* ---------- 卡片容器 ---------- */
 .panel {
-  background: var(--c-bg);
-  border: 2px solid var(--c-line);
-  border-radius: 16px;
+  background: var(--c-card);
+  border: 1px solid var(--c-line);
+  border-radius: 22px;
   padding: 28px 24px;
 }
 
@@ -249,4 +283,16 @@ button::after {
 
 @media (prefers-reduced-motion: reduce) {
   .dot { animation: none; opacity: 0.6; }
+}
+
+/* 无障碍：原生按钮的焦点可见轮廓 */
+button:focus-visible {
+  outline: 3px solid var(--c-primary);
+  outline-offset: 4px;
+}
+
+.full { width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn, .stair { transition: none; }
 }

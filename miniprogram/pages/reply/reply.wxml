@@ -16,7 +16,7 @@
 <view class="page" wx:elif="{{sent}}">
   <view class="page-center flex1">
     <text class="ok-title">已经发过去了</text>
-    <text class="t-body center mt-16">它会自己念给妈听</text>
+    <text class="t-body center mt-16">它会自己念给爸妈听</text>
     <view class="mt-48 full">
       <button class="btn btn-ghost" hover-class="none" bindtap="again">再补一句</button>
     </view>
@@ -26,8 +26,8 @@
 </view>
 
 <view class="page" wx:else>
-  <text class="title">妈卡在第 {{help.stepNo}} 步</text>
-  <text class="t-hint mt-8">共 {{help.stepTotal}} 步，她只差这一步</text>
+  <text class="title">爸妈卡在第 {{help.stepNo}} 步</text>
+  <text class="t-hint mt-8">共 {{help.stepTotal}} 步，TA只差这一步</text>
 
   <view class="card mt-24">
     <text class="card-text">{{help.stepText}}</text>
@@ -35,7 +35,7 @@
   </view>
 
   <view class="tip mt-24">
-    <text class="t-hint">说一句她能听懂的话。别用「那个」，说清楚是哪个。</text>
+    <text class="t-hint">说一句老人能听懂的话。别用「那个」，说清楚是哪个。</text>
   </view>
 
   <textarea

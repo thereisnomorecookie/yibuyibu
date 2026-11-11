@@ -10,9 +10,9 @@
   ],
   "window": {
     "navigationBarTitleText": "一步一步",
-    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarBackgroundColor": "#F7F8F2",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#FFFFFF",
+    "backgroundColor": "#F7F8F2",
     "backgroundTextStyle": "dark"
   },
   "style": "v2",

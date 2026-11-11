@@ -67,28 +67,39 @@
 <view class="ask-sheet" wx:if="{{ask.show}}">
   <!-- 选择态：先给样例，再给话筒 -->
   <block wx:if="{{ask.stage === 'choices'}}">
-    <text class="ask-title">这一页，您想问什么？</text>
-    <text class="ask-sub">只答这一页上写的事</text>
+    <!-- 断网且没有缓存：不列问题，只解释一句，别让老人对着点不动的东西 -->
+    <block wx:if="{{ask.offline}}">
+      <text class="ask-title">现在没网，问不了</text>
+      <text class="ask-hint">先按卡片上的做。不行就点「卡住了」，让孩子看看。</text>
+      <view class="mt-32">
+        <button class="btn btn-ghost" hover-class="none" bindtap="closeAsk">知道了</button>
+      </view>
+    </block>
 
-    <view
-      class="ask-q"
-      wx:for="{{quickList}}"
-      wx:key="*this"
-      data-q="{{item}}"
-      bindtap="askQuick"
-      hover-class="ask-press">{{item}}</view>
+    <block wx:else>
+      <text class="ask-title">这一页，您想问什么？</text>
+      <text class="ask-sub">只答这一页上写的事</text>
 
-    <view
-      class="ask-mic {{ask.recording ? 'on' : ''}}"
-      wx:if="{{ask.voice}}"
-      bindtouchstart="onMicStart"
-      bindtouchend="onMicEnd"
-      bindtouchcancel="onMicCancel"
-      hover-class="none">
-      <text class="ask-mic-text">{{ask.recording ? '松开，我说完了' : '按住说话'}}</text>
-    </view>
-    <text class="ask-note" wx:if="{{ask.voice && ask.recording}}">在听…</text>
-    <text class="ask-note" wx:elif="{{!ask.voice}}">麦克风没开，用上面的问题也行</text>
+      <view
+        class="ask-q"
+        wx:for="{{askItems}}"
+        wx:key="q"
+        data-index="{{index}}"
+        bindtap="askQuick"
+        hover-class="ask-press">{{item.q}}</view>
+
+      <view
+        class="ask-mic {{ask.recording ? 'on' : ''}}"
+        wx:if="{{ask.voice}}"
+        bindtouchstart="onMicStart"
+        bindtouchend="onMicEnd"
+        bindtouchcancel="onMicCancel"
+        hover-class="none">
+        <text class="ask-mic-text">{{ask.recording ? '松开，我说完了' : '按住说话'}}</text>
+      </view>
+      <text class="ask-note" wx:if="{{ask.voice && ask.recording}}">在听…</text>
+      <text class="ask-note" wx:elif="{{!ask.voice}}">麦克风没开，用上面的问题也行</text>
+    </block>
   </block>
 
   <!-- 思考态 -->

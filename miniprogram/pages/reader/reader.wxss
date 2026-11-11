@@ -242,6 +242,14 @@
   color: var(--c-text-3);
 }
 
+/* 断网提示：比正文轻，比说明重 */
+.ask-hint {
+  margin-top: 16px;
+  font-size: 28px;
+  line-height: 1.6;
+  color: var(--c-text-2);
+}
+
 .ask-q {
   display: flex;
   align-items: center;

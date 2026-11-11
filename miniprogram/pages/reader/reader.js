@@ -1,6 +1,7 @@
 const store = require('../../utils/store')
 const tts = require('../../utils/tts')
 const asr = require('../../utils/asr')
+const suggest = require('../../utils/suggest')
 
 const BLOCK_SUB = {
   dosage: '吃药的事，请让医生或药师看一眼',
@@ -22,12 +23,19 @@ Page({
     stairsArr: [],
     fontSize: 52,
     showResume: false,
-    quickList: ['是哪个按钮？', '这一步做完了吗？', '然后呢？'],
+    // 兜底三问：模型出不了题、断网、还没生成好，都用它顶着。
+    // 这三个对任何卡片都成立，不像"是哪个按钮"对"等两分钟"就是废题。
+    askItems: [
+      { q: '这一步做啥？', a: '' },
+      { q: '要注意什么？', a: '' },
+      { q: '做对了吗？', a: '' }
+    ],
     ask: {
       show: false,
       stage: 'choices',
       voice: false,
       recording: false,
+      offline: false,
       question: '',
       answer: ''
     }
@@ -97,10 +105,16 @@ Page({
       fontSize: this.calcFontSize(cards[startIdx].text)
     })
 
+    // 联想问题：当前卡先生成，下一张顺手排队；生成好了静默替换
+    const that = this
+    suggest.setListener(function (key, items) {
+      that.applySuggested(key, items)
+    })
+    this.prefetchSuggest(card, startIdx)
+
     // 预热整组，翻页不等待。按当前语速预热，避免慢速时仍播到正常档的缓存
     tts.prefetch(cards, { speed: this.speed })
 
-    const that = this
     setTimeout(function () {
       that.speakCurrent()
       if (that.needResumeHint) {
@@ -125,6 +139,9 @@ Page({
 
   onUnload() {
     tts.stop()
+    // 离开页面：清队列与在途，保留缓存，下次打开同组卡还是秒出
+    suggest.reset()
+    suggest.setListener(null)
   },
 
   speakCurrent() {
@@ -181,6 +198,7 @@ Page({
     tts.stop()
     this.remember(next)
     this.replayCount = 0
+    this.askPicked = false
     this.setData({
       idx: next,
       cur: cards[next],
@@ -188,6 +206,7 @@ Page({
       fontSize: this.calcFontSize(cards[next].text),
       showResume: false
     })
+    this.prefetchSuggest(card, next)
     this.speakCurrent()
   },
 
@@ -198,6 +217,7 @@ Page({
     tts.stop()
     this.remember(prev)
     this.replayCount = 0
+    this.askPicked = false
     this.setData({
       idx: prev,
       cur: cards[prev],
@@ -205,6 +225,7 @@ Page({
       fontSize: this.calcFontSize(cards[prev].text),
       showResume: false
     })
+    this.prefetchSuggest(this.data.card, prev)
     this.speakCurrent()
   },
 
@@ -230,6 +251,54 @@ Page({
   /** 遮罩上的滑动不要穿透到阅读页，否则会误翻页 */
   noop() {},
 
+  /** 把当前卡和下一张排进联想队列；已缓存则直接跳过 */
+  prefetchSuggest(card, idx) {
+    const cards = (card && card.cards) || []
+    const cur = cards[idx]
+    if (!cur) return
+
+    const source = card.readText || card.sourceText || ''
+
+    suggest.ensure({
+      cardText: cur.text || '',
+      anchor: cur.anchor || '',
+      sourceText: source
+    })
+
+    const next = cards[idx + 1]
+    if (next) {
+      suggest.ensure({
+        cardText: next.text || '',
+        anchor: next.anchor || '',
+        sourceText: source
+      })
+    }
+  },
+
+  /** 生成好了：只有当前卡才替换，且用户已经点开某一题就不动 */
+  applySuggested(key, items) {
+    const card = this.data.card || {}
+    const cur = this.data.cur || {}
+    const source = card.readText || card.sourceText || ''
+
+    if (key !== suggest.keyOf(cur.text || '', source)) return
+    if (this.data.ask.stage !== 'choices') return
+
+    this.setData({ askItems: items })
+  },
+
+  /** 断网判断：只用来决定浮层要不要列问题 */
+  isOffline() {
+    return new Promise(function (resolve) {
+      wx.getNetworkType({
+        success: function (res) {
+          resolve(!!(res && res.networkType === 'none'))
+        },
+        fail: function () { resolve(false) }
+      })
+    })
+  },
+
   callFn(name, data) {
     return new Promise(function (resolve, reject) {
       wx.cloud.callFunction({
@@ -246,18 +315,32 @@ Page({
   async openAsk() {
     tts.stop()
     this.askCache = this.askCache || {}
+    this.askPicked = false
 
-    // 权限被拒就不再显示话筒，只留快捷问题——不弹窗、不报错
+    const card = this.data.card || {}
+    const cur = this.data.cur || {}
+
+    // 有缓存直接用；没有就拿兜底三问顶着，后台继续生成
+    const source = card.readText || card.sourceText || ''
+    const cached = suggest.get(suggest.keyOf(cur.text || '', source))
+
+    // 权限被拒就不再显示话筒，只留问题——不弹窗、不报错
     const auth = await asr.checkAuth()
+    const offline = await this.isOffline()
+    const noNetwork = offline && !cached
 
     this.setData({
       'ask.show': true,
       'ask.stage': 'choices',
-      'ask.voice': auth !== 'denied',
+      'ask.voice': auth !== 'denied' && !offline,
       'ask.recording': false,
+      'ask.offline': noNetwork,
       'ask.question': '',
-      'ask.answer': ''
+      'ask.answer': '',
+      askItems: cached || this.data.askItems
     })
+
+    if (!cached && !offline) this.prefetchSuggest(card, this.data.idx)
   },
 
   closeAsk() {
@@ -271,14 +354,33 @@ Page({
   },
 
   askQuick(e) {
-    this.ask(e.currentTarget.dataset.q)
+    const idx = Number(e.currentTarget.dataset.index)
+    const item = this.data.askItems[idx]
+    if (!item) return
+
+    this.askPicked = true
+
+    // 成对生成的问题，答案已经在手里，直接出，不再请求
+    if (item.a) {
+      this.showAnswer(item.q, item.a)
+      return
+    }
+
+    this.ask(item.q)
   },
 
   askAgain() {
+    const card = this.data.card || {}
+    const cur = this.data.cur || {}
+    const source = card.readText || card.sourceText || ''
+    // 回到选择态时再读一次缓存：上一轮生成的可能刚回来
+    const cached = suggest.get(suggest.keyOf(cur.text || '', source))
+
     this.setData({
       'ask.stage': 'choices',
       'ask.question': '',
-      'ask.answer': ''
+      'ask.answer': '',
+      askItems: cached || this.data.askItems
     })
   },
 
